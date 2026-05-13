@@ -24,8 +24,6 @@ def generar_matriz_A(N, sigma_J=1.0, sigma_H=1.0, semilla=None):
         
     return A
 
-
-# Directorio para almacenar las matrices 
 os.makedirs("instancias_espin", exist_ok=True)
 
 
@@ -38,11 +36,12 @@ dimensiones = {
 
 for categoria, lista_N in dimensiones.items():
     for N in lista_N:
-
-        # Usamos una semilla basada en N para generar siempre la misma matriz 
-        matriz_A = generar_matriz_A(N, sigma_J=1.0, sigma_H=1.0, semilla=42+N)
-        
-        # Guardamos la matriz en formato binario eficiente de NumPy (.npy)
-        nombre_archivo = f"instancias_espin/matriz_A_{categoria}_N{N}.npy"
-        np.save(nombre_archivo, matriz_A)
+        for inst in range(1, 6):
+            semilla_instancia = 42 + N + inst
+            
+            # sigma_H=0.0 asegura la frustración máxima
+            matriz_A = generar_matriz_A(N, sigma_J=1.0, sigma_H=1.0, semilla=semilla_instancia)
+            
+            nombre_archivo = f"instancias_espin/matriz_A_{categoria}_N{N}_instancia{inst}.npy"
+            np.save(nombre_archivo, matriz_A)
 
